@@ -6,9 +6,10 @@ use App\Http\Requests\UpdateAccountRequest;
 use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use SebastianBergmann\Environment\Console;
 use Symfony\Component\HttpFoundation\Response;
 
-class AccountsController extends Controller
+class ConsolesController extends Controller
 {
     public function index()
 
@@ -18,51 +19,59 @@ class AccountsController extends Controller
         // $accounts = Account::all();
 
         // return view('tasks.index', compact('tasks'));
-        $accounts = Account::all();
-        return view('accounts.index', compact('accounts'));
+        // $accounts = Account::all();
+        // return view('accounts.index', compact('accounts'));
+
+        $consoles = Console::all();
+        return view('console.index', compact('consoles'));
     }
 
     public function create()
     {
         abort_if(Gate::denies('task_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('accounts.create');
+        // return view('accounts.create');
+        return view('consoles.create')
     }
 
-    public function store(StoreAccountRequest $request)
+    public function store(StoreConsoleRequest $request)
     {
-        Account::create($request->validated());
+        // Account::create($request->validated());
 
-        return redirect()->route('accounts.index');
+        // return redirect()->route('accounts.index');
+
+        Console::create($request->validated());
+
+        return redirect()->route('consoles.index');
     }
 
-    public function show(Account $account)
-    {
-        abort_if(Gate::denies('task_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return view('accounts.show', compact('account'));
-    }
-
-    public function edit(Account $account)
+    public function show(Console $console)
     {
         abort_if(Gate::denies('task_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('accounts.edit', compact('account'));
+        return view('consoles.show', compact('console'));
     }
 
-    public function update(UpdateAccountRequest $request, Account $account)
-    {
-        $account->update($request->validated());
-
-        return redirect()->route('accounts.index');
-    }
-
-    public function destroy(Account $account)
+    public function edit(Console $console)
     {
         abort_if(Gate::denies('task_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $account->delete();
+        return view('consoles.edit', compact('console'));
+    }
 
-        return redirect()->route('accounts.index');
+    public function update(UpdateConsoleRequest $request, Console $console)
+    {
+        $console->update($request->validated());
+
+        return redirect()->route('consoles.index');
+    }
+
+    public function destroy(Console $console)
+    {
+        abort_if(Gate::denies('task_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $console->delete();
+
+        return redirect()->route('consoles.index');
     }
 }
